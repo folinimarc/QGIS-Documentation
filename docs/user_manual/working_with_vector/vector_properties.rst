@@ -892,12 +892,21 @@ Heatmap Renderer
 
 With the |heatmapSymbol| :guilabel:`Heatmap` renderer you can create live
 dynamic heatmaps for (multi)point layers.
-You can specify the heatmap radius in millimeters, points, pixels, map units or
-inches, choose and edit a color ramp for the heatmap style and use a slider for
+You can specify the heatmap :guilabel:`Radius` in millimeters, points, pixels, map units or
+inches, choose and edit a :guilabel:`Color ramp` for the heatmap style and use a slider for
 selecting a trade-off between render speed and quality. You can also define a
-maximum value limit and give a weight to points using a field or an expression.
+:guilabel:`Maximum value` limit and :guilabel:`Weight points by` using a field or an expression.
+
+Use |dataDefine| :sup:`Data defined override` to dynamically control :guilabel:`Radius` and
+:guilabel:`Maximum value` based on the attributes of your data.
+For example, the radius of a heatmap point could be determined by its population attribute,
+or the maximum value could be based on a temporal range.
+
 When adding or removing a feature the heatmap renderer updates the heatmap style
-automatically.
+automatically. The :guilabel:`Color ramp` will be shown as a legend bar and
+in the :guilabel:`Legend settings` you can set the :guilabel:`Labels` for the :guilabel:`Maximum`
+and :guilabel:`Minimum` values. You can also change the orientation and direction of the legend
+in the :guilabel:`Layout`.
 
 .. _figure_heatmap_symbology:
 
@@ -1774,7 +1783,9 @@ Diagrams Properties
 ===================
 
 The |diagram| :guilabel:`Diagrams` tab allows you to add a graphic overlay to
-a vector layer (see :numref:`figure_diagrams_attributes`).
+a vector layer (see :numref:`figure_diagrams_attributes`). This
+dialog can also be accessed from the :guilabel:`Layer Styling` panel, or using
+the |diagram| :sup:`Layer Diagram Options` button of the **Labels toolbar**.
 
 The current core implementation of diagrams provides support for:
 
@@ -1786,9 +1797,12 @@ The current core implementation of diagrams provides support for:
 * |text| :guilabel:`Text diagram`, a horizontally divided circle showing statistic
   values inside;
 * |histogram| :guilabel:`Histogram`, bars of varying colors for each attribute
-  aligned next to each other
-* |stackedBar| :guilabel:`Stacked bars`, Stacks bars of varying colors for each
-  attribute on top of each other vertically or horizontally
+  aligned next to each other;
+* |stackedBar| :guilabel:`Stacked bars`, stacks bars of varying colors for each
+  attribute on top of each other vertically or horizontally;
+* |stackedDiagram| :guilabel:`Stacked diagram`, stacks diagrams of equal or varying
+  types, next to each other, vertically or horizontally. More details at
+  :ref:`Stacked Diagrams <stacked_diagrams>`.
 
 In the top right corner of the :guilabel:`Diagrams` tab, the |autoPlacementSettings|
 :sup:`Automated placement settings (applies to all layers)` button provides
@@ -1988,6 +2002,39 @@ in the :ref:`Layers panel <label_legend>`, and in the :ref:`print layout legend
 
 When set, the diagram legend items (attributes with color and diagram size)
 are also displayed in the print layout legend, next to the layer symbology.
+
+.. _stacked_diagrams:
+
+Stacked Diagrams
+----------------
+
+Stacked diagrams allow users to create complex diagrams like population pyramids,
+where two subdiagrams, namely histograms, are located side by side and displayed
+horizontally.
+
+.. _figure_stacked_diagrams:
+
+.. figure:: img/population_pyramids.png
+   :align: center
+
+   Population pyramids built for each layer feature
+
+Multi-temporal diagrams can also be constructed as stacked diagrams. The number
+of subdiagrams, as well as the spacing between them can be configured.
+
+Moreover, subdiagrams can have different types (e.g., a pie chart alongside a
+histogram) and have their own independent settings like :ref:`Attributes <diagram_attributes>`,
+:ref:`Rendering <diagram_appearance>`, :ref:`Size <diagram_size>`,
+:ref:`Options <diagram_options>` and :ref:`Legend <diagram_legend>`.
+
+:ref:`Placement <diagram_placement>` settings in a stacked diagram, as well as
+some visibility settings (located in the :ref:`Rendering <diagram_appearance>`
+tab), are determined by the placement and visibility settings of the first
+subdiagram in the stack.
+
+Finally, subdiagram ordering is given by the item ordering in the Stacked Diagram's
+list. The first subdiagram appears to the left in a horizontal stacked diagram,
+or in the upper part of a vertical one.
 
 .. _vector_mask_menu:
 
@@ -2583,6 +2630,13 @@ with the field type. The available widgets are:
   for fields of ``array`` type.
 * **Range**: Allows you to set numeric values from a specific range. The edit
   widget can be either a slider or a spin box.
+
+  .. note::
+
+   Some layers, such as GeoPackage or ESRI File Geodatabase, with predefined **range Field Domains**
+   will be automatically recognized by QGIS and assigned a **Range** widget for the relevant fields.
+   The widget will be prefilled with the minimum and maximum values specified in the domain.
+
 * **Relation Reference**: This is the default widget assigned to the referencing
   field (i.e., the foreign key in the child layer) when a :ref:`relation <vector_relations>`
   is set. It provides direct access to the parent feature's form which in turn
@@ -2599,6 +2653,12 @@ with the field type. The available widgets are:
 * **Value Map**: A combo box with predefined items. The value is stored in
   the attribute, the description is shown in the combo box. You can define
   values manually or load them from a layer or a CSV file.
+  
+  .. note::
+
+   Some layers, such as GeoPackage or ESRI File Geodatabase, with predefined **coded Field Domains**
+   will be automatically recognized by QGIS and assigned a **Value Map** widget for the relevant fields.
+
 * **Value Relation**: Offers values from a related table in a combobox. You can
   select layer, key column and value column. Several options are available to
   change the standard behaviors: allow null value, order by value, allow
@@ -3192,7 +3252,7 @@ feature identification:
     features in all layers
   * the feature identifier in the attribute table :ref:`form view <attribute_table_view>`
   * the feature identifier when the map or layout is exported to a layered
-    output format such as GeoPDF
+    output format such as Geospatial PDF
   * the map tip information, i.e. the message displayed in the map canvas
     when hovering over a feature of the active layer with the |mapTips| :sup:`Show Map Tips` icon pressed.
     Applicable when |checkbox| :guilabel:`Enable Map Tips` is active
@@ -3424,7 +3484,16 @@ Specifically, you can set:
 
    Vector layer elevation properties dialog
 
-
+* :guilabel:`Vertical Reference System`: If the CRS of your vector layer is a compound one
+  (including a Z dimension), then the vertical CRS used for the layer will be the vertical
+  component of the layer CRS. In this case, you cannot manually set a different vertical CRS.
+  If your layer CRS is horizontal (2D), then you can select a specific vertical CRS
+  by clicking on the |setProjection| :sup:`Select CRS`.
+  Vertical reference systems are supported for vector layers by:
+   
+   * :ref:`Elevation profiles <label_elevation_profile_view>`
+   * :ref:`Identify Tool Results <identify_results_dialog>`
+   * :ref:`3D map views <label_3dmapview>`
 * :guilabel:`Elevation Clamping`: defines how and whether the features altitude
   should be:
 
@@ -3587,10 +3656,12 @@ sections.
 
 From the :guilabel:`Description` section, you can change the :guilabel:`Short name`
 used to reference the layer in requests (to learn more about short names, read
-:ref:`services_basics_short_name`). You can also add or edit a :guilabel:`Title` and
-:guilabel:`Abstract` for the layer, or define a :guilabel:`Keyword list` here. These
-keyword lists can be used in a metadata catalog. If you want to use a title from an
-XML metadata file, you have to fill in a link in the :guilabel:`Data URL` field.
+:ref:`services_basics_short_name`). You can also add or edit a
+:guilabel:`Title`, an alternative :guilabel:`WFS Title` and
+:guilabel:`Abstract` for the layer, or define a :guilabel:`Keyword list` here.
+These keyword lists can be used in a metadata catalog. If you want to use a
+title from an XML metadata file, you have to fill in a link in the
+:guilabel:`Data URL` field.
 
 Use :guilabel:`Attribution` to get attribute data from an XML metadata catalog.
 
@@ -3893,6 +3964,8 @@ To do so:
 .. |sourceFields| image:: /static/common/mSourceFields.png
    :width: 1.5em
 .. |stackedBar| image:: /static/common/stacked-bar.png
+   :width: 1.5em
+.. |stackedDiagram| image:: /static/common/stacked-diagram.png
    :width: 1.5em
 .. |symbology| image:: /static/common/symbology.png
    :width: 2em

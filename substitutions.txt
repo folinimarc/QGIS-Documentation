@@ -5,16 +5,16 @@
    :width: 1.5em
 .. |25dSymbol| image:: /static/common/renderer25dSymbol.png
    :width: 1.5em
-.. |336| replace:: ``NEW in 3.36``
-.. |338| replace:: ``NEW in 3.38``
-.. |340| replace:: ``NEW in 3.40``
+.. |342| replace:: ``NEW in 3.42``
+.. |344| replace:: ``NEW in 3.44``
+.. |346| replace:: ``NEW in 3.46``
 .. |3d| image:: /static/common/3d.png
    :width: 1.5em
 .. |3dNavigation| image:: /static/common/mAction3DNavigation.png
    :width: 1.3em
 .. |8To24Bits| image:: /static/common/8-to-24-bits.png
    :width: 1.5em
-.. |CURRENT| replace:: 3.34
+.. |CURRENT| replace:: 3.40
 .. |QG| replace:: QGIS
 .. |action| image:: /static/common/action.png
    :width: 2em
@@ -229,6 +229,8 @@
 .. |clearText| image:: /static/common/mIconClearText.png
    :width: 1.5em
 .. |clip| image:: /static/common/mAlgorithmClip.png
+   :width: 1.5em
+.. |cloud| image:: /static/common/mIconCloud.png
    :width: 1.5em
 .. |codeEditor| image:: /static/common/mIconCodeEditor.png
    :width: 1.5em
@@ -1177,6 +1179,8 @@
    :width: 1.5em
 .. |srtmFileName| replace:: :file:`srtm_41_19_4326.tif`
 .. |stackedBar| image:: /static/common/stacked-bar.png
+   :width: 1.5em
+.. |stackedDiagram| image:: /static/common/stacked-diagram.png
    :width: 1.5em
 .. |start| image:: /static/common/mActionStart.png
    :width: 1.5em

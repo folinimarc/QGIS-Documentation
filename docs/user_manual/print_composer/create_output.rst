@@ -225,6 +225,13 @@ To export a layout as PDF:
      keep the objects as vectors with the risk that the appearance of the output
      file may not match the print layout preview (for more details, see
      :ref:`layout_export_settings`).
+
+     .. note:: **Mind opacity settings for vector layers**
+   
+      When you set a layer-wide opacity (or opacity for any vector symbology)
+      to less than 100%, it forces a rasterized rendering of those objects during PDF exports.
+      Depending on the size of the layer, this may considerably increase the PDF file size.
+      
    * |checkbox| :guilabel:`Append georeference information`: available only if
      the :ref:`reference map <reference_map>`, from which the information is taken,
      is on the first page.
@@ -244,7 +251,7 @@ To export a layout as PDF:
      * or :guilabel:`Lossless`, which creates bigger files in most cases, but is
        much more suitable for printing outputs or for post-production in external
        applications (requires Qt 5.13 or later).
-   * |unchecked| :guilabel:`Create Geospatial PDF (GeoPDF)`:
+   * |unchecked| :guilabel:`Create Geospatial PDF`:
      Generate a georeferenced PDF file.
    * |unchecked| :guilabel:`Disable tiled raster layer exports`: When exporting
      files, QGIS uses tiled based rendering that saves memory.
@@ -269,16 +276,17 @@ To export a layout as PDF:
 
    PDF Export Options
 
-.. note:: GeoPDF export is supported, and a number of GeoPDF specific options
+.. note:: Geospatial PDF export is supported, and a number of Geospatial PDF specific options
    are available:
    
-   * :guilabel:`Format` (GeoPDF format - there are some GeoPDF variations),
+   * :guilabel:`Format` (Geospatial PDF format - there are some variations),
    * :guilabel:`Include multiple map themes` (specify map themes to include),
    * :guilabel:`Include vector feature information` (choose the layers and
      group them into logical PDF groups).
 
 .. note:: Exporting a print layout to formats that supports georeferencing
    (e.g. ``PDF`` and ``TIFF``) creates a georeferenced output by default.
+
 
 .. index:: Atlas generation
 

@@ -587,8 +587,7 @@ Basic parameters
      - Buffer distance (from the boundary of each feature).
        You can use the Data Defined button on the right to choose
        a field from which the radius will be calculated.
-       This way you can have different radius for each feature
-       (see :ref:`qgisvariabledistancebuffer`).
+       This way you can have different radius for each feature.
    * - **Segments**
      - ``SEGMENTS``
      - [number]
@@ -844,7 +843,7 @@ additional information (number of errors found and types of error):
 **Default menu**: :menuselection:`Vector --> Geometry Tools`
 
 .. seealso:: :ref:`qgisfixgeometries` and the core plugin
-   :ref:`geometry_checker`
+   :ref:`geometry_checker`, :ref:`qgiscoveragevalidate`
 
 Parameters
 ..........
@@ -2134,7 +2133,7 @@ input feature that happens to be processed.
 
 **Default menu**: :menuselection:`Vector --> Geoprocessing Tools`
 
-.. seealso:: :ref:`qgisaggregate`, :ref:`qgiscollect`
+.. seealso:: :ref:`qgiscoverageunion`, :ref:`qgisaggregate`, :ref:`qgiscollect`
 
 Parameters
 ..........
@@ -2512,6 +2511,13 @@ line.
 Each line in the resulting layer contains only a start and an end
 point, with no intermediate vertices between them.
 
+If the input layer consists of CircularStrings or CompoundCurves,
+the output layer will be of the same type and contain only single curve segments.
+
+.. note::
+
+ * This algorithm drops existing primary keys or FID values and regenerates them in output layers.
+ * This algorithm does not require valid geometries as input.
 
 .. figure:: img/explode_lines.png
    :align: center
@@ -6152,7 +6158,7 @@ of line and polygon features
 
 **Default menu**: :menuselection:`Vector --> Geometry Tools`
 
-.. seealso:: :ref:`qgissmoothgeometry`, :ref:`qgisdensifygeometries`,
+.. seealso:: :ref:`qgiscoveragesimplify`, :ref:`qgissmoothgeometry`, :ref:`qgisdensifygeometries`,
  :ref:`qgisdensifygeometriesgivenaninterval`
 
 Parameters
@@ -6393,9 +6399,8 @@ this will not be smoothed. For example, setting the maximum angle to
 :ref:`features in-place modification <processing_inplace_edit>`
 of line and polygon features
 
-.. seealso:: :ref:`qgissimplifygeometries`,
-   :ref:`qgisdensifygeometries`,
-   :ref:`qgisdensifygeometriesgivenaninterval`
+.. seealso:: :ref:`qgissimplifygeometries`, :ref:`qgiscoveragesimplify`,
+   :ref:`qgisdensifygeometries`, :ref:`qgisdensifygeometriesgivenaninterval`
 
 Parameters
 ..........

@@ -22,7 +22,7 @@ distributions and OSs provide packages for QGIS Server.
   without using ``sudo``.
 
 Requirements and steps to add official QGIS repositories to install QGIS Server on a Debian based system are
-provided in `QGIS installers page <https://qgis.org/en/site/forusers/alldownloads.html>`_.
+provided in `QGIS installers page <https://qgis.org/resources/installation-guide/#linux>`_.
 You may want to install at least the latest Long Term Release.
 
 Once the target version repository is configured and QGIS Server installed,
@@ -621,8 +621,8 @@ Installation on Windows
 
 .. index:: Windows
 
-QGIS Server can also be installed on Windows systems using the 64 bit version
-of the OSGeo4W network installer (https://qgis.org/en/site/forusers/download.html).
+QGIS Server can also be installed on Windows systems using
+the OSGeo4W network installer (https://qgis.org/resources/installation-guide/#windows).
 
 A simple procedure is the following:
 
@@ -768,31 +768,13 @@ like this in your web browser to retrieve the *countries* layer:
 
   .. code-block:: bash
 
-    http://qgis.demo/cgi-bin/qgis_mapserv.fcgi?
-      MAP=/home/qgis/projects/world.qgs&
-      LAYERS=countries&
-      SERVICE=WMS&
-      VERSION=1.3.0&
-      REQUEST=GetMap&
-      CRS=EPSG:4326&
-      WIDTH=400&
-      HEIGHT=200&
-      BBOX=-90,-180,90,180
+    http://qgis.demo/cgi-bin/qgis_mapserv.fcgi?MAP=/home/qgis/projects/world.qgs&LAYERS=countries&SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&CRS=EPSG:4326&WIDTH=400&HEIGHT=200&BBOX=-90,-180,90,180
 
 * If you followed the above instructions to install an NGINX HTTP Server:
 
   .. code-block:: bash
 
-    http://qgis.demo/qgisserver?
-      MAP=/home/qgis/projects/world.qgs&
-      LAYERS=countries&
-      SERVICE=WMS&
-      VERSION=1.3.0&
-      REQUEST=GetMap&
-      CRS=EPSG:4326&
-      WIDTH=400&
-      HEIGHT=200&
-      BBOX=-90,-180,90,180
+    http://qgis.demo/qgisserver?MAP=/home/qgis/projects/world.qgs&LAYERS=countries&SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&CRS=EPSG:4326&WIDTH=400&HEIGHT=200&BBOX=-90,-180,90,180
 
 If you obtain the next image, then QGIS Server is running correctly:
 

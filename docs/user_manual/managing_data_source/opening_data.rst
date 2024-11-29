@@ -22,13 +22,13 @@ and often write a lot of formats:
   MapInfo and MicroStation file formats, AutoCAD DWG/DXF,
   GRASS and many more...
   Read the complete list of `supported vector formats
-  <https://gdal.org/drivers/vector/index.html>`_.
+  <https://gdal.org/drivers/vector/index.html>`__.
 * Raster data formats include GeoTIFF, JPEG, ASCII Gridded XYZ,
   MBTiles, R or Idrisi rasters, GDAL Virtual, SRTM, Sentinel Data,
   ERDAS IMAGINE, ArcInfo Binary Grid, ArcInfo ASCII Grid, and
   many more...
   Read the complete list of `supported raster formats
-  <https://gdal.org/drivers/raster/index.html>`_.
+  <https://gdal.org/drivers/raster/index.html>`__.
 * Database formats include PostgreSQL/PostGIS, SQLite/SpatiaLite, Oracle,
   MS SQL Server, SAP HANA, MySQL...
 * Web map and data services (WM(T)S, WFS, WCS, CSW, XYZ tiles, ArcGIS
@@ -376,7 +376,16 @@ To load a layer from a file:
    Other formats can be loaded by selecting ``All files`` (the top item
    in the pull-down menu).
 #. Press :guilabel:`Open` to load the selected file into :guilabel:`Data
-   Source Manager` dialog
+   Source Manager` dialog.
+
+   Depending on the selected layer type, additional :guilabel:`Options`
+   (encoding, geometry type, table filtering, file locking, data formatting ...)
+   are available for configuring.
+   These options are described in detail in the specific GDAL
+   `vector <https://gdal.org/drivers/vector/>`__
+   or `raster <https://gdal.org/drivers/raster>`__ driver documentation.
+   At the top of the options, a text with hyperlink will directly lead to the documentation
+   of the appopriate driver for the selected file format.
 
    .. _figure_vector_layer_open_options:
 
@@ -404,13 +413,6 @@ To load a layer from a file:
 
       QGIS with Shapefile of Alaska loaded
 
-.. note::
-
- For loading vector and raster files the GDAL driver offers to define open
- actions. These will be shown when a file is selected. Options are described
- in detail on https://gdal.org/drivers/vector/, https://gdal.org/drivers/raster
- and if a file is selected in QGIS, a text with hyperlink will directly
- lead to the documentation of the selected file type.
 .. note::
 
  Because some formats like MapInfo (e.g., :file:`.tab`) or Autocad (:file:`.dxf`)
@@ -448,9 +450,16 @@ Layer` tabs allow loading of layers from source types other than :guilabel:`File
   * ``HTTP/HTTPS/FTP``, with a :guilabel:`URI` and, if required,
     an :ref:`authentication <authentication_index>`.
   * Cloud storage such as ``AWS S3``, ``Google Cloud Storage``, ``Microsoft
-    Azure Blob``, ``Alibaba OSS Cloud``, ``Open Stack Swift Storage``.
+    Azure Blob``, ``Microsoft Azure Data Lake Storage``, ``Alibaba OSS Cloud``, and
+    ``Open Stack Swift Storage`` supports direct control over VSI :guilabel:`Credential Options`
+    when adding OGR vector or GDAL raster layers.
     You need to fill in the :guilabel:`Bucket or container` and the
-    :guilabel:`Object key`.
+    :guilabel:`Object key` first. After that, you can add the necessary :guilabel:`Credential Options`.
+
+    When adding OGR vector or GDAL raster layers from the cloud based protocols,
+    you can also set additional :guilabel:`Credential options` for that specific driver and bucket.
+    When credential options are found in a layer's URI, they will also be automatically set.
+    This allows different layers to use different credentials.
   * service supporting OGC ``WFS 3`` (still experimental),
     using ``GeoJSON`` or ``GEOJSON - Newline Delimited`` format or based on
     ``CouchDB`` database.
@@ -1113,7 +1122,7 @@ To create a new MS SQL Server connection, you need to provide some of the
 following information in the :guilabel:`Connection Details` dialog:
 
 * :guilabel:`Connection name`
-* :guilabel:`Provider/DNS`
+* :guilabel:`Provider/DSN`
 * :guilabel:`Host`
 * :guilabel:`Login` information. You can choose
   to |checkbox| :guilabel:`Save` your credentials.
@@ -1381,7 +1390,16 @@ Services can be either a :guilabel:`New Generic Connection...` or a
 You set up a service by adding:
 
 * a :guilabel:`Name`
-* the :guilabel:`URL`: of the type ``http://example.com/{z}/{x}/{y}.pbf`` for generic
+* a :guilabel:`Style URL`: a URL to a MapBox GL JSON style configuration.
+  If provided, then that style will be applied whenever the layers
+  from the connection are added to QGIS.
+  In the case of Arcgis vector tile service connections, the URL overrides
+  the default style configuration specified in the server configuration.
+
+  You can load vector tiles directly from a :guilabel:`Style URL`.
+  The data source is automatically parsed from the style, and URLs with multiple sources are supported.
+  That makes :guilabel:`Source URL` optional.
+* the :guilabel:`Source URL`: of the type ``http://example.com/{z}/{x}/{y}.pbf`` for generic
   services and ``http://example.com/arcgis/rest/services/Layer/VectorTileServer``
   for ArcGIS based services.
   The service must provide tiles in :file:`.pbf` format.
@@ -1393,23 +1411,18 @@ You set up a service by adding:
   For Mercator projection (used by OpenStreetMap Vector Tiles) Zoom Level 0
   represents the whole world at a scale of 1:500.000.000. Zoom Level 14
   represents the scale 1:35.000.
-* a :guilabel:`Style URL`: a URL to a MapBox GL JSON style configuration.
-  If provided, then that style will be applied whenever the layers
-  from the connection are added to QGIS.
-  In the case of Arcgis vector tile service connections, the URL overrides
-  the default style configuration specified in the server configuration.
 * the :ref:`authentication <authentication_index>` configuration if necessary
 * a :guilabel:`Referer`
 
-:numref:`figure_vector_tiles_maptilerplanet` shows the dialog with the
-MapTiler planet Vector Tiles service configuration.
+:numref:`figure_vector_tiles_configuration` shows the dialog with the
+Vector Tiles service configuration.
 
-.. _figure_vector_tiles_maptilerplanet:
+.. _figure_vector_tiles_configuration:
 
-.. figure:: img/vector_tiles_maptilerplanet.png
+.. figure:: img/vector_tiles_configuration.png
    :align: center
 
-   Vector Tiles - Maptiler Planet configuration
+   Vector Tiles - Service configuration
 
 Configurations can be saved to :file:`.XML` file (:guilabel:`Save Connections`)
 through the :guilabel:`Vector Tiles` entry in :guilabel:`Data Source Manager`
@@ -1601,11 +1614,14 @@ Once a connection to an ArcGIS REST Server is set, it's possible to:
 .. index:: 3D Tiles services
 .. _3d_tiles:
 
-Using 3D tiles services
------------------------
+Using 3D tiled scene services
+------------------------------
 
-To load a 3D tiles into QGIS, use the |addTiledSceneLayer| :guilabel:`Scene` tab
-in the :guilabel:`Data Source Manager` dialog. 
+QGIS supports multiple formats of 3D tiled datasets, grouped together as "tiled
+scenes". These include Cesium 3D Tiles and Quantized Mesh tiles.
+
+To load a tiled scene dataset into QGIS, use the |addTiledSceneLayer|
+:guilabel:`Scene` tab in the :guilabel:`Data Source Manager` dialog.
 
 .. _figure_scene:
 
@@ -1614,26 +1630,26 @@ in the :guilabel:`Data Source Manager` dialog.
 
    Data Source Manager - Scene
 
-Create a :guilabel:`New Cesium 3D Tiles Connection` by clicking on 
-:guilabel:`New`. Add :guilabel:`Name` and :guilabel:`URL` or add
-local tileset file.
+Create a connection by clicking on :guilabel:`New`. You can add a
+:guilabel:`New Cesium 3D Tiles Connection` or a :guilabel:`New Quantized Mesh
+Connection`.
 
-Support for 3D tiles:
+Choose a :guilabel:`Name` and set the :guilabel:`URL` to the URL of a layer description JSON file.
 
-* Remote source - ``http://example.com/tileset.json``
-* Local files - ``file:///path/to/tiles/tileset.json``
+The URL may be remote (e.g. ``http://example.com/tileset.json``) or local (e.g.
+``file:///path/to/tiles/tileset.json``).
 
 .. _figure_tiled_scene_connection:
 
 .. figure:: img/tiled_scene_connection.png
    :align: center
 
-   Tiled Scene Connection 
+   Tiled Scene Connection
 
 You can also add the service from :guilabel:`Browser Panel`.
 
 After creating new connection you are able to :guilabel:`Add` the new layer
-to your map. 
+to your map.
 
 .. _figure_3d_tiles_layer:
 
@@ -1642,6 +1658,41 @@ to your map.
 
    3D Tiles Layer - Textured
 
+.. _figure_quantized_mesh_layer:
+
+.. figure:: img/quantized_mesh_layer.png
+   :align: center
+
+   Quantized Mesh layer
+
+.. index:: Cloud connections
+.. _cloud_connections:
+
+Using Cloud Connections
+-----------------------
+
+QGIS supports connections to cloud services like Alibaba Cloud OSS, Amazon S3, Google Cloud Storage,
+Microsoft Azure Blob Storage, Microsoft Azure Data Lake Storage, and OpenStack Swift Object Storage.
+You can load vector and raster data from these services into QGIS.
+Set up a new |cloud| :guilabel:`Cloud` connection in the :guilabel:`Browser` panel by right-clicking
+on the :guilabel:`Cloud` entry and selecting :guilabel:`New Connection`. You will see a drop-down list of
+available cloud services.
+Select the service you want to connect to and fill in the required fields:
+
+.. _figure_cloud_connection:
+
+.. figure:: img/cloud_connection.png
+   :align: center
+
+   Cloud Connection Dialog
+
+* :guilabel:`Name`: A name for the connection.
+* :guilabel:`Bucket or Container`: The name of the bucket or container in the cloud service.
+* :guilabel:`Object Key` (optional): The key of the object in the bucket or container.
+* :guilabel:`Credentials`: The credentials to access the cloud service.
+
+You can also choose to :guilabel:`Save Connection` to an XML file
+or :guilabel:`Load Connection` from an XML file.
 
 .. Substitutions definitions - AVOID EDITING PAST THIS LINE
    This will be automatically updated by the find_set_subst.py script.
@@ -1681,6 +1732,8 @@ to your map.
    :width: 1.5em
 .. |checkbox| image:: /static/common/checkbox.png
    :width: 1.3em
+.. |cloud| image:: /static/common/mIconCloud.png
+   :width: 1.5em   
 .. |collapseTree| image:: /static/common/mActionCollapseTree.png
    :width: 1.5em
 .. |dataSourceManager| image:: /static/common/mActionDataSourceManager.png
@@ -1714,6 +1767,8 @@ to your map.
 .. |refresh| image:: /static/common/mActionRefresh.png
    :width: 1.5em
 .. |setProjection| image:: /static/common/mActionSetProjection.png
+   :width: 1.5em
+.. |sourceFields| image:: /static/common/mSourceFields.png
    :width: 1.5em
 .. |spatialite| image:: /static/common/mIconSpatialite.png
    :width: 1.5em

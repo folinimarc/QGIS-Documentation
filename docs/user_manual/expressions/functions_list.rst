@@ -125,6 +125,24 @@ This group contains functions to convert one data type to another
 
 .. include:: expression_help/Conversions.rst
    :start-after: :orphan:
+   :end-before: end_to_date_section
+
+Further reading: :ref:`expression_function_Date_and_Time_format_date`
+
+.. include:: expression_help/Conversions.rst
+   :start-after: end_to_date_section
+   :end-before: end_to_datetime_section
+
+Further reading: :ref:`expression_function_Date_and_Time_format_date`
+
+.. include:: expression_help/Conversions.rst
+   :start-after: end_to_datetime_section
+   :end-before: end_to_time_section
+
+Further reading: :ref:`expression_function_Date_and_Time_format_date`
+
+.. include:: expression_help/Conversions.rst
+   :start-after: end_to_time_section
 
 
 Custom Functions
@@ -163,6 +181,24 @@ This group shares several functions with the :ref:`conversion_functions`
 
 .. include:: expression_help/Date_and_Time.rst
    :start-after: :orphan:
+   :end-before: end_to_date_section
+
+Further reading: :ref:`expression_function_Date_and_Time_format_date`
+
+.. include:: expression_help/Date_and_Time.rst
+   :start-after: end_to_date_section
+   :end-before: end_to_datetime_section
+
+Further reading: :ref:`expression_function_Date_and_Time_format_date`
+
+.. include:: expression_help/Date_and_Time.rst
+   :start-after: end_to_datetime_section
+   :end-before: end_to_time_section
+
+Further reading: :ref:`expression_function_Date_and_Time_format_date`
+
+.. include:: expression_help/Date_and_Time.rst
+   :start-after: end_to_time_section
 
 
 **Some examples:**
@@ -1158,6 +1194,14 @@ To use these variables in an expression, they should be preceded by the
    "layer_id", "The ID of current layer"
    "layer_ids", "The IDs of all the map layers in the current project as a list"
    "layer_name", "The name of current layer"
+   "layer_vertical_crs", "The Identifier for the vertical coordinate reference system
+   of the layer (e.g., 'EPSG:5703')"
+   "layer_vertical_crs_definition", "The full definition of the vertical Coordinate
+   reference system of the layer"
+   "layer_vertical_crs_description", "The name of the vertical Coordinate reference
+   system of the layer"
+   "layer_vertical_crs_wkt", "The WKT definition of the vertical
+   Coordinate reference system of the current layer"
    "layers", "All the map layers in the current project as a list"
    "layout_dpi", "The composition resolution (DPI)"
    "layout_name", "The layout name"

@@ -132,8 +132,12 @@ displayed at the bottom of the frame.
   version of QGIS`. You can always open projects created with older version of
   QGIS but once the project is saved, trying to open with older release may fail
   because of features not available in that version.
-* :guilabel:`Enable macros` |selectString|. This option was created to handle
-  macros that are written to perform an action on project events. You can
+
+.. _load_project_code:
+
+* :guilabel:`Enable project's embedded Python code` |selectString|. This option
+  handles execution of macros that are written to perform an action on project
+  events, as well as custom Python functions to be used as expressions. You can
   choose between 'Never', 'Ask', 'For this session only' and
   'Always (not recommended)'.
 * :guilabel:`Default paths`: defines whether paths to files and layers used
@@ -399,6 +403,7 @@ Data Sources settings
 **Feature attributes and table**
 
 * |checkbox| :guilabel:`Open attribute table as docked window`
+* |checkbox| :guilabel:`Autosize all columns by default when opening attribute table`
 * :guilabel:`Copy features as`: defines the format to use for data when pasting
   features in other applications.
 
@@ -916,16 +921,22 @@ This tab helps you configure general settings when :ref:`editing vector layer
   transparent circle' or 'None')
 * Define vertex :guilabel:`Marker size (in millimeter)`
 
+.. _curve_offset_tool:
+
 **Curve offset tool**
 
-The next 3 options refer to the |offsetCurve| :sup:`Offset Curve` tool in
-:ref:`sec_advanced_edit`. Through the various settings, it is possible to
-influence the shape of the line offset. These options are possible starting
-from GEOS 3.3.
+The next options refer to the |offsetCurve| :sup:`Offset Curve` tool in :ref:`sec_advanced_edit`.
+Through the various settings, it is possible to influence the shape of the line offset.
 
-* :guilabel:`Join style`: 'Round', 'Mitre' or 'Bevel'
-* :guilabel:`Quadrant segments`
-* :guilabel:`Miter limit`
+* :guilabel:`Join style`: specifies whether 'Round', 'Miter' or 'Bevel' joins should be
+  used when offsetting corners
+* :guilabel:`Quadrant segments`: controls the number of line segments to use
+  to approximate a quarter circle when creating rounded offsets
+* :guilabel:`Miter limit`: Sets the maximum distance from the offset geometry to use
+  when creating a mitered join as a factor of the offset distance
+  (only applicable for miter join style)
+* :guilabel:`End cap style`: controls how line endings are handled;
+  they can be 'Round', 'Flat' or 'Square'.
 
 **Tracing**
 
@@ -2139,7 +2150,9 @@ by the :ref:`elevation profile <label_elevation_profile_view>` tool.
 
    Project Elevation tab
 
-* :guilabel:`Vertical Reference System`
+* :guilabel:`Vertical Reference System`: If the CRS of your project is compound one (including a Z dimension),
+  then the vertical CRS used for the project will be the vertical component of the project CRS.
+  If your project CRS is horizontal, then you can select a specific vertical CRS by clicking on the |setProjection| :sup:`Select CRS`.
 * :guilabel:`Elevation Range`: helps you define the :guilabel:`Lower` and :guilabel:`Upper` limits
   for the elevation controller in the project.
 
@@ -2802,6 +2815,8 @@ in the QGIS user profile.
 .. |selectString| image:: /static/common/selectstring.png
    :width: 2.5em
 .. |sensor| image:: /static/common/sensor.png
+   :width: 1.5em
+.. |setProjection| image:: /static/common/mActionSetProjection.png
    :width: 1.5em
 .. |settings| image:: /static/common/settings.png
    :width: 1.5em

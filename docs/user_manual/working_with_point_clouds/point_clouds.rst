@@ -54,6 +54,9 @@ attribute table of point clouds in QGIS. However, the |identify|
 :ref:`Identify tool <identify>` supports point clouds, so you can display all
 attributes, even of a single data point.
 
+If you want to create a new layer, in the same or another supported format,
+from an existing point cloud layer, see :ref:`Creating new layers from an existing layer <general_saveas>`.
+
 
 .. _`point_clouds_properties`:
 
@@ -620,6 +623,17 @@ the Z-values of the data. This may be necessary to adjust the elevation of
 the data in 3D maps and its appearance in the :ref:`profile tool charts <label_elevation_profile_view>`.
 There are following options:
 
+* :guilabel:`Vertical Reference System`: If the CRS of your point cloud layer is a compound one
+  (including a Z dimension), then the vertical CRS used for the layer will be automatically derived from
+  the vertical component of the layer's CRS.
+  In this case, you cannot manually set a different vertical CRS, and the option to change it will be disabled.
+  If your point cloud layer uses a horizontal (2D) CRS (though uncommon),
+  you can manually select a specific vertical CRS by clicking on the |setProjection|:sup:`Select CRS`.
+  Vertical reference systems are supported for point cloud layers in:
+
+   * :ref:`Elevation profiles <label_elevation_profile_view>`
+   * :ref:`Identify Tool Results <identify_results_dialog>`
+   * :ref:`3D map views <label_3dmapview>`
 * Under :guilabel:`Elevation` group:
 
   * You can set a :guilabel:`Scale`: If ``10`` is entered here, a point that has a
